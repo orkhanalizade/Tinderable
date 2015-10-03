@@ -173,17 +173,17 @@ public class TinderableView: UIView {
         return views.first
     }
     
+    var counter = 0
     public func loadViews() {
-        if views.count<numPrefetchedViews {
-            for _ in (views.count..<numPrefetchedViews) {
-                if let nextView = nextView?() {
-                    nextView.addGestureRecognizer(TinderablePanGestureRecognizer(target: self, action: Selector("handlePan:")))
-                    views.append(nextView)
-                    containerView.addSubview(nextView)
-                    containerView.sendSubviewToBack(nextView)
-                }
+        if let nextView = nextView?() {
+            if counter < numPrefetchedViews {
+                nextView.addGestureRecognizer(TinderablePanGestureRecognizer(target: self, action: Selector("handlePan:")))
+                containerView.addSubview(nextView)
+                containerView.sendSubviewToBack(nextView)
+                counter++
             }
         }
+        
         if let _ = topView() {
             animateViews()
         }
